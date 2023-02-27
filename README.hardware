@@ -1,0 +1,94 @@
+		Xilinx Versal Board Support Package
+
+
+Table of Contents
+=================
+
+1. Supported Boards
+2. Change History
+3. BSP Features
+4. BSP Notes
+
+
+1. Supported Boards
+===================
+
+This BSP supports the following boards:
+
+  + Xilinx Versal VCK190 REV 1.0/1.1
+
+
+2. Change History
+=================
+
+  - 2023/02 (LINUXPG-1441): Wind River Linux LTS22 RCPL8: Add BSP support for Versal VCK190 based on
+			   Xilinx SDK 2022.02
+
+3. BSP Features
+===============
+
+3.1 Supported Features
+----------------------
+
+The following BSP features are validated and supported on boards where
+the corresponding h/w features exist.
+
+  o Bus
+	+ CANFD: Xilinx CANFD
+	+ I2C: Cadence
+	+ QSPI: ZynqMP QSPI
+	+ USB: Host/Gadget/OTG mode
+
+  o Network
+	+ MACB: Gigabits Controller
+	+ PHY: Fixed MDIO
+
+  o Storage
+	+ NOR Flash: N25Q00A 256MB(X-EBM-01)
+	+ SD/MMC
+
+  o Power Mgmt
+	+ CPU hotplug
+	+ CPU Frequency
+
+  o Misc Devices
+	+ GPIO: On-Chip general purpose I/O peripheral
+	+ EDAC versal memory controller
+	+ INA2xx
+	+ RTC
+	+ UART
+
+3.2 Patch integrated and Unsupported Features
+---------------------------------------------
+
+The following features are not validated:
+
+  x CPU IDLE: WFI mode
+  x Two HDMI ports
+  x 1x2 zSFP/SFP+ connector
+  x 1 zQSFP connector
+  x SMMU
+  x FPGA Mezzanine Card Interface
+  x 8-lane PCIe edge connector
+  x DMA Engine: The enhanced direct memory access (EDMA) controller
+
+Most of these features are not validated since they need a special TRD firmware
+bootloader with the related PL bitstream, generally speaking, you can download
+the specific Xilinx xapp from the vendor website with your Xilinx account,
+like xapp1305 for SFP interface.
+
+Please refer to BSP notes for more information.
+
+4. BSP Notes
+============
+
+4.1 Validated Board Info
+------------------------
+
+This BSP is only validated in following environment. If you use this BSP
+in a different environment it may possibly have some issues.
+
+	Processor:              Versal VC1902
+	Board Revision:	        EK-VCK190-G-ED
+	BootLoader:             U-Boot
+	BootLoader Version:     U-Boot 2022.02

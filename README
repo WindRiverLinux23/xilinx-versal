@@ -1,0 +1,199 @@
+        Xilinx Versal Boards
+
+
+1. About this document
+======================
+This document provides common and non-hardware specific information.
+Please refer to README.hardware for hardware specific information.
+
+Dependencies
+------------
+This layer depends on the oe-core version supplied with Wind River Linux
+and the wrlinux layer.
+
+
+Maintenance
+-----------
+This layer is maintained by Wind River Systems, Inc.
+Contact <support@windriver.com> or your support representative for more
+information on submitting changes.
+
+
+Building the versal layer
+-----------------------------
+This layer and wrlinux layer should be added to bblayers.conf.
+
+
+License
+-------
+Copyright (C) 2023 Wind River Systems, Inc.
+
+Source code included in the tree for individual recipes is under the LICENSE
+stated in the associated recipe (.bb file) unless otherwise stated.
+
+The metadata is under the following license unless otherwise stated.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+2. BSP Kernel and Distros
+=========================
+
+The following table summarizes the valid Wind River Linux distros for this BSP.
+'Y' in each content cell stands for supported; 'N' stands for not supported:
+
+  +--------------+-------------+-------------+------------------+
+  | valid/distro |   wrlinux   | wrlinux-cgl | wrlinux-std-sato |
+  +--------------+-------------+-------------+------------------+
+  |    valid     |      Y      |      N      |         Y        |
+  +--------------+-------------+-------------+------------------+
+
+For the supported kernel type for this BSP, check the TARGET_SUPPORTED_KTYPES
+by running 'bitbake -e | grep "^TARGET_SUPPORTED_KTYPES"'.
+
+Note: The preempt-rt kernel type can be used with this BSP/Machine.
+
+3. Board Specific Patches
+=========================
+
+To get a list of patches applied to the kernel specific to this BSP along with
+patch descriptions use git-whatchanged on the default kernel. For example:
+
+	%> cd tmp-glibc/work-shared/<bsp_name>/kernel-source
+	%> git whatchanged <kernel_version>/standard/base..<kernel_version>/standard/<bsp_name>
+
+
+4. Boot Instructions
+====================
+
+You must load the DTB (device tree blob) into the target's memory
+prior to booting the kernel Image. The DTB file can be found in the export
+directory after building a project, or you can generate it manually with the
+following commands:
+
+	# bitbake -c devshell virtual/kernel
+	# vim arch/arm64/boot/dts/xilinx/the_file_you_edit*.dts
+	# make xilinx/versal-vck190-rev1.1.dtb
+
+The resulting DTB file can be found here:
+path_to_project/build/tmp-glibc/work/<bsp name>-wrs-linux/linux-yocto/<kernel version>/linux-<bsp name>-<kernel type>-build/arch/arm64/boot/dts/xilinx/
+
+Assuming all files can be downloaded from a network, deploy your board and host
+properly to ensure your network is available from the board.
+
+4.1 NFS boot
+------------
+
+4.1.1 Setup configuration your NFS TFTP server, and deploy the rootfs tarball
+-----------------------------------------------------------------------------
+
+	# sudo tar jxf wrlinux-image-std-sato-xilinx-versal.tar.bz2 -C path_to_rootfs
+
+4.1.2 Set the u-boot environment variables and boot from NFS
+------------------------------------------------------------
+
+	=> setenv bootargs console=ttyAMA0 earlycon=pl011,mmio32,0xFF000000,115200n8 clk_ignore_unused root=/dev/nfs rw nfsroot=serverip:path_root_rootfs ip=dhcp
+	=> tftpboot 0x10000000 Image; tftpboot 0x13800000 dtb; booti 0x10000000 - 0x13800000
+
+5. WIC Notes
+============
+
+User can use the OpenEmbedded Image Creator to create the properly partitioned
+image on a SD card. It generates partitioned images from existing OpenEmbedded
+build artifacts. Please refer to the following URL for more detailed partition
+information about WIC:
+
+https://docs.yoctoproject.org/singleindex.html#creating-partitioned-images-using-wic
+
+5.1 Build WIC image within BOOT.BIN in boot partition
+-----------------------------------------------------
+
+BOOT.BIN is the bootloader for vck190 board. Because of license issue, it isn't
+integrated into WRLinux. You can download it from the website:
+
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842316/Linux+Prebuilt+Images
+
+and then add one line below to local.conf:
+
+IMAGE_BOOT_FILES:append = " /< path-to-BOOT.BIN >/BOOT.BIN;BOOT.BIN"
+
+After having built your project, a partitioned WIC image will be created in the
+deploy folder as follows:
+
+  path_to_your_project/build/tmp-glibc/deploy/images/xilinx-versal/wrlinux-image-<rootfs_type>-xilinx-versal.wic
+
+There are two partitions in this WIC images, the first one is to hold the boot
+images(including kernel/dtb/BOOT.BIN), the second is the related root file system.
+
+5.2 Boot the board from the WIC SD card
+---------------------------------------
+
+Insert the SD card into the board and power on, then set the proper u-boot
+environment parameters to boot the board, please refer to section 4 for more
+information.
+
+Board can boot automatically by set the below uboot environment variables:
+
+=> setenv bootfile Image; setenv fdtfile versal-vck190-rev1.1.dtb;  setenv loadaddr 0x10000000; setenv fdtaddr 0x13800000;
+
+=> setenv bootargs 'root=/dev/mmcblk0p2 rw console=ttyAMA0 earlycon=pl011,mmio32,0xFF000000,115200n8 clk_ignore_unused rootwait'
+
+=> setenv bootcmd 'fatload mmc 0:1 $loadaddr $bootfile; fatload mmc 0:1 $fdtaddr $fdtfile; booti $loadaddr - $fdtaddr';
+
+=> saveenv; run bootcmd;
+
+6. Multilib
+===========
+
+By default, this BSP is configured as a 64-bit kernel and 64-bit userspace.
+If a full 32-bit filesystem is necessary, use the prefix "lib32-" before
+the expected target image as follows:
+
+	# bitbake lib32-wrlinux-image-std
+
+7. kexec and kdump
+===================
+
+You need to add feature/kexec support as follow:
+	./wrlinux-x/setup.sh --machines xilinx-versal --templates feature/kexec,feature/kdump
+
+7.1 kexec
+---------
+
+	kexec -l  /boot/Image --append="`cat /proc/cmdline`"
+	kexec -e
+
+7.2 kdump
+---------
+
+Add crashkernel=512M to the kernel cmdline
+   kexec -p /boot/Image --append="$your-bootcmd"
+   echo c > /proc/sysrq-trigger
+
+8. Features
+===========
+
+8.4 System Monitor
+------------------
+
+System monitor includes PL monitor and PS monitor.
+Each system monitor measures voltage and temperature to provide information and alarms
+to other parts of the system including the PMU, RPU, and APU processors.
+
+Customer could check the detail system monitor interfaces with below command:
+	# ls -la /sys/bus/iio/devices/iio:device0
