@@ -188,7 +188,7 @@ Add crashkernel=512M to the kernel cmdline
 8. Features
 ===========
 
-8.4 System Monitor
+8.1 System Monitor
 ------------------
 
 System monitor includes PL monitor and PS monitor.
@@ -197,3 +197,12 @@ to other parts of the system including the PMU, RPU, and APU processors.
 
 Customer could check the detail system monitor interfaces with below command:
 	# ls -la /sys/bus/iio/devices/iio:device0
+
+8.2 QSPI
+--------
+
+There are QSPI NOR Flash at the X-EBM-01 QSPI external daughter card, please make sure that
+the X-EBM-01 card is installed on J212 of the VCK190 board. And should use the specific dtb
+file versal-vck190-rev1.1-x-ebm-01-revA.dtb which can be found at the path:
+
+path_to_your_project/build/tmp-glibc/deploy/images/xilinx-versal/
