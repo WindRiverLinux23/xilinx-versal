@@ -88,7 +88,14 @@ following commands:
 
 	# bitbake -c devshell virtual/kernel
 	# vim arch/arm64/boot/dts/xilinx/the_file_you_edit*.dts
-	# make xilinx/versal-vck190-rev1.1.dtb
+	# make xilinx/dtb-file-name
+
+The dtb-file-name includes the following dtbs:
+	versal-vck190-rev1.1.dtb
+	versal-vmk180-rev1.1.dtb
+	versal-vck190-rev1.1-x-ebm-01-revA.dtb
+	versal-vmk180-rev1.1-x-ebm-01-revA.dtb
+Please use the right one for different board.
 
 The resulting DTB file can be found here:
 path_to_project/build/tmp-glibc/work/<bsp name>-wrs-linux/linux-yocto/<kernel version>/linux-<bsp name>-<kernel type>-build/arch/arm64/boot/dts/xilinx/
@@ -123,7 +130,7 @@ https://docs.yoctoproject.org/singleindex.html#creating-partitioned-images-using
 5.1 Build WIC image within BOOT.BIN in boot partition
 -----------------------------------------------------
 
-BOOT.BIN is the bootloader for vck190 board. Because of license issue, it isn't
+BOOT.BIN is the bootloader for vck190/vmk180 board. Because of license issue, it isn't
 integrated into WRLinux. You can download it from the website:
 
 https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842316/Linux+Prebuilt+Images
@@ -149,7 +156,7 @@ information.
 
 Board can boot automatically by set the below uboot environment variables:
 
-=> setenv bootfile Image; setenv fdtfile versal-vck190-rev1.1.dtb;  setenv loadaddr 0x10000000; setenv fdtaddr 0x13800000;
+=> setenv bootfile Image; setenv fdtfile dtb-file-name;  setenv loadaddr 0x10000000; setenv fdtaddr 0x13800000;
 
 => setenv bootargs 'root=/dev/mmcblk0p2 rw console=ttyAMA0 earlycon=pl011,mmio32,0xFF000000,115200n8 clk_ignore_unused rootwait'
 
@@ -203,6 +210,7 @@ Customer could check the detail system monitor interfaces with below command:
 
 There are QSPI NOR Flash at the X-EBM-01 QSPI external daughter card, please make sure that
 the X-EBM-01 card is installed on J212 of the VCK190 board. And should use the specific dtb
-file versal-vck190-rev1.1-x-ebm-01-revA.dtb which can be found at the path:
+file versal-vck190-rev1.1-x-ebm-01-revA.dtb for vck190 board or versal-vmk180-rev1.1-x-ebm-01-revA.dtb
+for vmk180 board which can be found at the path:
 
 path_to_your_project/build/tmp-glibc/deploy/images/xilinx-versal/
