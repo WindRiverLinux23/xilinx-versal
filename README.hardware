@@ -22,7 +22,9 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2023/02 (LINUXPG-1441): Wind River Linux LTS22 RCPL8: Add BSP support for Versal VCK190/VMK180 based on
+  - 2023/02 (LINUXPG-1441): Wind River Linux LTS22 RCPL8: Add BSP support for Versal VCK190 based on
+			   Xilinx SDK 2022.02
+  - 2023/02 (LINUXPG-1442): Wind River Linux LTS22 RCPL8: Add BSP support for Versal VMK180 based on
 			   Xilinx SDK 2022.02
 
 3. BSP Features
@@ -47,6 +49,7 @@ the corresponding h/w features exist.
   o Storage
 	+ NOR Flash: N25Q00A 256MB(X-EBM-01)
 	+ SD/MMC
+	+ EEPROM(M24128-BR)
 
   o Power Mgmt
 	+ CPU hotplug
@@ -58,12 +61,20 @@ the corresponding h/w features exist.
 	+ INA2xx
 	+ RTC
 	+ UART
+	+ Watchdog
+	+ LPD DMA
+	+ System Monitor
 
 3.2 Patch integrated and Unsupported Features
 ---------------------------------------------
 
 The following features are not validated:
 
+  x AI Engine
+  x Xilinx Pinmux
+  x Cadence TTC
+  x Suspend-To-RAM
+  x TCA6416
   x CPU IDLE: WFI mode
   x Two HDMI ports
   x 1x2 zSFP/SFP+ connector
@@ -71,7 +82,6 @@ The following features are not validated:
   x SMMU
   x FPGA Mezzanine Card Interface
   x 8-lane PCIe edge connector
-  x DMA Engine: The enhanced direct memory access (EDMA) controller
 
 Most of these features are not validated since they need a special TRD firmware
 bootloader with the related PL bitstream, generally speaking, you can download
