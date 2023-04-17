@@ -38,7 +38,7 @@ the corresponding h/w features exist.
 
   o Bus
 	+ CANFD: Xilinx CANFD
-	+ I2C: Cadence
+	+ I2C: Cadence (Only i2c@ff030000)
 	+ QSPI: ZynqMP QSPI
 	+ USB: Host/Gadget/OTG mode
 
@@ -82,6 +82,7 @@ The following features are not validated:
   x SMMU
   x FPGA Mezzanine Card Interface
   x 8-lane PCIe edge connector
+  x Cadence I2C (i2c@ff020000)
 
 Most of these features are not validated since they need a special TRD firmware
 bootloader with the related PL bitstream, generally speaking, you can download
