@@ -164,38 +164,29 @@ Board can boot automatically by set the below uboot environment variables:
 
 => saveenv; run bootcmd;
 
-6. Multilib
-===========
-
-By default, this BSP is configured as a 64-bit kernel and 64-bit userspace.
-If a full 32-bit filesystem is necessary, use the prefix "lib32-" before
-the expected target image as follows:
-
-	# bitbake lib32-wrlinux-image-std
-
-7. kexec and kdump
+6. kexec and kdump
 ===================
 
 You need to add feature/kexec support as follow:
 	./wrlinux-x/setup.sh --machines xilinx-versal --templates feature/kexec,feature/kdump
 
-7.1 kexec
+6.1 kexec
 ---------
 
 	kexec -l  /boot/Image --append="`cat /proc/cmdline`"
 	kexec -e
 
-7.2 kdump
+6.2 kdump
 ---------
 
 Add crashkernel=512M to the kernel cmdline
    kexec -p /boot/Image --append="$your-bootcmd"
    echo c > /proc/sysrq-trigger
 
-8. Features
+7. Features
 ===========
 
-8.1 System Monitor
+7.1 System Monitor
 ------------------
 
 System monitor includes PL monitor and PS monitor.
@@ -205,7 +196,7 @@ to other parts of the system including the PMU, RPU, and APU processors.
 Customer could check the detail system monitor interfaces with below command:
 	# ls -la /sys/bus/iio/devices/iio:device0
 
-8.2 QSPI
+7.2 QSPI
 --------
 
 There are QSPI NOR Flash at the X-EBM-01 QSPI external daughter card, please make sure that
