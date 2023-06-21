@@ -11,7 +11,6 @@ XILINX_DTB_FILES = " versal-vck190-rev1.1.dtb versal-vck190-rev1.1-x-ebm-01-revA
 						versal-vmk180-rev1.1.dtb versal-vmk180-rev1.1-x-ebm-01-revA.dtb"
 
 KERNEL_DEVICETREE = "${@''.join('xilinx/%s ' % d for d in '${XILINX_DTB_FILES}'.split())}"
-KERNEL_EXTRA_ARGS:append = " DTC_FLAGS='-@'"
 
 SERIAL_CONSOLE = "115200 ttyPS0"
 

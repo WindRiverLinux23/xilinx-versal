@@ -7,3 +7,5 @@ COMPATIBLE_MACHINE = "xilinx-versal"
 TARGET_SUPPORTED_KTYPES = "standard preempt-rt"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+KERNEL_DTC_FLAGS:append:xilinx-versal = " -@"
