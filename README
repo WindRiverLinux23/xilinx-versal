@@ -109,7 +109,7 @@ properly to ensure your network is available from the board.
 4.1.1 Setup configuration your NFS TFTP server, and deploy the rootfs tarball
 -----------------------------------------------------------------------------
 
-	# sudo tar jxf wrlinux-image-std-sato-xilinx-versal.tar.bz2 -C path_to_rootfs
+	# sudo tar jxf wrlinux-image-std-xilinx-versal.tar.bz2 -C path_to_rootfs
 
 4.1.2 Set the u-boot environment variables and boot from NFS
 ------------------------------------------------------------
@@ -205,3 +205,22 @@ file versal-vck190-rev1.1-x-ebm-01-revA.dtb for vck190 board or versal-vmk180-re
 for vmk180 board which can be found at the path:
 
 path_to_your_project/build/tmp-glibc/deploy/images/xilinx-versal/
+
+7.3 CANFD
+---------
+
+There is one canfd device interface J5 at board. Connect the canfd interfaces of 2 boards and use
+the following verification commands:
+
+VCK190/VMK180 board-1:
+	# ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
+	# candump can0 &
+	# ip -d -s link show can0
+
+VCK190/VMK180 board-2:
+	# ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
+	# cansend can0 5A1#11.22.33.44.55.66.77.88
+	# cansend can0 5A1##300112233445566778899aabbccddeeff
+	# ip -d -s link show can0
+
+If can0 at board-1 can dump data from board-2, CANFD feature works fine.

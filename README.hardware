@@ -71,6 +71,7 @@ the corresponding h/w features exist.
 The following features are not validated:
 
   x AI Engine
+  x EDAC
   x Xilinx Pinmux
   x Cadence TTC
   x Suspend-To-RAM
@@ -86,8 +87,7 @@ The following features are not validated:
 
 Most of these features are not validated since they need a special TRD firmware
 bootloader with the related PL bitstream, generally speaking, you can download
-the specific Xilinx xapp from the vendor website with your Xilinx account,
-like xapp1305 for SFP interface.
+the specific Xilinx xapp from the vendor website with your Xilinx account.
 
 Please refer to BSP notes for more information.
 
