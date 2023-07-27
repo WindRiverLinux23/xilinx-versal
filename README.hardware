@@ -22,10 +22,10 @@ This BSP supports the following boards:
 2. Change History
 =================
 
-  - 2023/02 (LINUXPG-1441): Wind River Linux LTS22 RCPL8: Add BSP support for Versal VCK190 based on
-			   Xilinx SDK 2022.02
-  - 2023/06 (LINUXPG-1442): Wind River Linux LTS22 RCPL10: Add BSP support for Versal VMK180 based on
-			   Xilinx SDK 2022.02
+  - 2023/07 (LINUXPG-1697): Wind River Linux LTS23 RCPL2: Add BSP support for Versal VCK190 based on
+			   Xilinx SDK 2023.01
+  - 2023/07 (LINUXPG-1696): Wind River Linux LTS23 RCPL2: Add BSP support for Versal VMK180 based on
+			   Xilinx SDK 2023.01
 
 3. BSP Features
 ===============
