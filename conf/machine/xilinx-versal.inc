@@ -6,6 +6,8 @@ require conf/machine/include/arm/armv8a/tune-cortexa72.inc
 
 MACHINE_FEATURES += "ext3 pci usbgadget usbhost vfat keyboard network"
 
+BSP_XILINX_DERIVED:append = " xilinx-versal"
+
 KERNEL_IMAGETYPE = "Image"
 XILINX_DTB_FILES = " versal-vck190-rev1.1.dtb versal-vck190-rev1.1-x-ebm-01-revA.dtb \
 						versal-vmk180-rev1.1.dtb versal-vmk180-rev1.1-x-ebm-01-revA.dtb"
@@ -20,6 +22,12 @@ PREFERRED_VERSION_linux-yocto-rt ?= "6.1%"
 
 MACHINE_EXTRA_RRECOMMENDS = " kernel-modules kernel-devicetree"
 IMAGE_FSTYPES += "tar.bz2 wic wic.bmap"
+
+# variables needed by xilinx-bootbin
+MACHINEOVERRIDES:prepend = "versal:"
+SOC_FAMILY ?= "versal"
+UBOOT_MACHINE ?= "xilinx_versal_virt_defconfig"
+UBOOT_ELF = "u-boot.elf"
 
 # wic support
 WKS_FILE ?= "versal-sdimage.wks"

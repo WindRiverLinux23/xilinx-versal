@@ -104,10 +104,10 @@ VCK190:
 	Processor:              Versal VC1902
 	Board Revision:	        EK-VCK190-G-ED
 	BootLoader:             U-Boot
-	BootLoader Version:     U-Boot 2022.02
+	BootLoader Version:     U-Boot 2023.01
 
 VMK180:
 	Processor:              Versal VM1802
 	Board Revision:	        EK-VMK180-G-ED
 	BootLoader:             U-Boot
-	BootLoader Version:     U-Boot 2022.02
+	BootLoader Version:     U-Boot 2023.01
