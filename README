@@ -66,7 +66,7 @@ The following table summarizes the valid Wind River Linux distros for this BSP.
 For the supported kernel type for this BSP, check the TARGET_SUPPORTED_KTYPES
 by running 'bitbake -e | grep "^TARGET_SUPPORTED_KTYPES"'.
 
-Note: The preempt-rt ktype is not available for this BSP/Machine at this time.
+Note: The preempt-rt ktype is available for this BSP/Machine at this time.
 
 3. Board Specific Patches
 =========================
@@ -188,7 +188,7 @@ information.
 
 Board can boot automatically by set the below uboot environment variables:
 
-=> setenv bootfile Image; setenv fdtfile dtb-file-name;  setenv loadaddr 0x10000000; setenv fdtaddr 0x13800000;
+=> setenv bootfile Image; setenv fdtfile dtb-file-name; setenv loadaddr 0x10000000; setenv fdtaddr 0x18800000;
 
 => setenv bootargs 'root=/dev/mmcblk0p2 rw console=ttyAMA0 earlycon=pl011,mmio32,0xFF000000,115200n8 clk_ignore_unused rootwait'
 
@@ -252,7 +252,56 @@ VCK190/VMK180 board-1:
 VCK190/VMK180 board-2:
 	# ip link set can0 up type can bitrate 125000 dbitrate 8000000 fd on
 	# cansend can0 5A1#11.22.33.44.55.66.77.88
-	# cansend can0 5A1##300112233445566778899aabbccddeeff
+	# cansend can0 5A1##000112233445566778899aabbccddeeff
 	# ip -d -s link show can0
 
 If can0 at board-1 can dump data from board-2, CANFD feature works fine.
+
+7.4 USB
+-------
+
+For VMK180/VCK190 board, the USB controller can be configured as host, device modes.
+
+7.4.1 USB Host
+--------------
+
+For Host mode, short the jumper 1-2 of J308:
+	J308
+	1-2 3
+
+7.4.2 USB Device
+----------------
+
+For Device mode, open the jumper 1-2 of J308:
+	J308
+	1 2 3
+
+In addition to the method which modifies "dr_mode" property in dts file, you can change this property
+by using "fdt" u-boot command. The example for USB device mode is as described below:
+
+    => tftpboot 0x10000000 Image; tftpboot 0x18800000 dtb
+    => fdt addr 0x18800000; fdt resize; fdt set /axi/usb@ff9d0000/usb@fe200000 dr_mode peripheral
+    => booti 0x10000000 - 0x18800000
+
+Use the below example settings for configuring USB as MASS STORAGE profile to verify the device mode:
+
+	root@xilinx-versal:~#dd if=/dev/zero of=/tmp/mydev count=500 bs=1M
+	root@xilinx-versal:~#cd /sys/kernel/config/usb_gadget
+	root@xilinx-versal:~#mkdir g1
+	root@xilinx-versal:~#cd g1
+	root@xilinx-versal:~#echo "64" > bMaxPacketSize0
+	root@xilinx-versal:~#echo "0x200" > bcdUSB
+	root@xilinx-versal:~#echo "0x100" > bcdDevice
+	root@xilinx-versal:~#echo "0x03FD" > idVendor
+	root@xilinx-versal:~#echo "0x0501" > idProduct
+	root@xilinx-versal:~#cat max_speed
+	root@xilinx-versal:~#echo "high-speed" > max_speed
+	root@xilinx-versal:~#mkdir functions/mass_storage.ms0
+	root@xilinx-versal:~#mkdir configs/c1.1
+	root@xilinx-versal:~#echo /tmp/mydev > functions/mass_storage.ms0/lun.0/file
+	root@xilinx-versal:~#echo 1 > functions/mass_storage.ms0/lun.0/removable
+	root@xilinx-versal:~#ln -s functions/mass_storage.ms0/ configs/c1.1/
+	root@xilinx-versal:~#echo "fe200000.usb" > UDC
+
+Connect the cable from board to Windows or Linux host machine, and the mass storage device
+can be observed.

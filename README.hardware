@@ -40,7 +40,7 @@ the corresponding h/w features exist.
 	+ CANFD: Xilinx CANFD
 	+ I2C: Cadence (Only i2c@ff030000)
 	+ QSPI: ZynqMP QSPI
-	+ USB: Host/Gadget/OTG mode
+	+ USB: Host/Gadget
 
   o Network
 	+ MACB: Gigabits Controller
@@ -57,7 +57,6 @@ the corresponding h/w features exist.
 
   o Misc Devices
 	+ GPIO: On-Chip general purpose I/O peripheral
-	+ EDAC versal memory controller
 	+ INA2xx
 	+ RTC
 	+ UART
